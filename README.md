@@ -1,6 +1,6 @@
 This is a sample project structure for Onboarding 
 
-The modules folder will contain the resource blocks which would create the actual resources.
+The modules folder will contain the resource blocks which would create the actual resources. It contains separate folders for Astronomer, Snowflake and DataBricks.
 
 The nonprod, qa and prod folders would contain are the environment specific folders. We will apply the code for each of these environments from the corresponding folders by running the terraform init/plan/apply commands.
 
