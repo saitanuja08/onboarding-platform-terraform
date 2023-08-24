@@ -1,4 +1,4 @@
 module databricks-workspace {
-  source = "../modules/databricks"
-  region = "eastus"
+  source = "../modules/Azure-Infra"
+  usernames = ["AD-User1", "AD-User2", "AD-User3", "AD-User4", "AD-User5"]
 }
