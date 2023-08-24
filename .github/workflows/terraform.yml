@@ -30,6 +30,10 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.AZURE_CREDENTIALS }}
 
+    # Login to Azure
+    - name: Login to Azure     
+      run: az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
