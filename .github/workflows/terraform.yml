@@ -34,6 +34,7 @@ jobs:
     - name: Terraform Init
       run: |
         cd nonprod
+        cat .terraformrc
         terraform init
 
     # Checks that all Terraform configuration files adhere to a canonical format
