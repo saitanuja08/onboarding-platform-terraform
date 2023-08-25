@@ -30,14 +30,20 @@ jobs:
         cli_config_credentials_token: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Login to Azure
-    - name: Login to Azure     
-      run: az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+    - name: Login to Azure 
+      run: |
+        export ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}
+        export ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}
+        export ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        export ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}        
+     # run: az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
         cd nonprod        
-        terraform init -upgrade
+        terraform init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
