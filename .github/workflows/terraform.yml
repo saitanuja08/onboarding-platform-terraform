@@ -43,7 +43,7 @@ jobs:
     - name: Terraform Init
       run: |
         cd nonprod        
-        terraform init
+        terraform init -backend-config=subscription_id="$ARM_SUBSCRIPTION_ID" -backend-config=tenant_id="${AZURE_TENANT_ID}" -backend-config=client_id="${AZURE_CLIENT_ID}" -backend-config=client_secret="${AZURE_CLIENT_SECRET}"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
