@@ -9,9 +9,9 @@ on:
         type: choice
         description: Choose the environment to deploy theTerraform code
         options: 
+        - nonprod
         - qa
         - prod
-        - nonprod
 
 permissions:
   contents: read
