@@ -27,38 +27,20 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout code
       uses: actions/checkout@v2
-
+      
+    # Install Terraform
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
+    # Install Azure CLI
     - name: Install Azure CLI
       run: |
         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-    - name: Check
-      run: |
-        which terraform
-        which az
-
+        
     # Login to Azure
     - name: Login to Azure 
-      run: |
-        # export ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}
-        # export ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}
-        # export ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        # export ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}        
-        az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-
-    # - name: Set up Azure CLI
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
-    #   env:
-    #     ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    #     ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-    #     ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    #     ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    
+      run: az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
@@ -73,16 +55,30 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
         cd nonprod
         terraform plan -input=false
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    # Apply the Terraform Code
     - name: Terraform Apply
       run: |
         cd nonprod
         terraform apply -auto-approve -input=false
+      env: 
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
