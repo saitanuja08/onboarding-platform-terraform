@@ -25,23 +25,31 @@ jobs:
 
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
+    - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # Login to Azure
-    - name: Login to Azure 
-      run: |
-        #export ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}
-        #export ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}
-        #export ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        #export ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}        
-        az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+    # # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    # - name: Setup Terraform
+    #   uses: hashicorp/setup-terraform@v1
+    #   with:
+    #     cli_config_credentials_token: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set up Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # # Login to Azure
+    # - name: Login to Azure 
+    #   run: |
+    #     #export ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}
+    #     #export ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}
+    #     #export ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    #     #export ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}        
+    #     #az login --service-principal --allow-no-subscriptions --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
           
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
