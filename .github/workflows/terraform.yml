@@ -4,6 +4,16 @@ on:
     branches: [ "main" ]
   pull_request:
 
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Choose the environment to deploy theTerraform code
+        options: 
+        - qa
+        - prod
+        - nonprod
+
 permissions:
   contents: read
 
@@ -44,7 +54,7 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        cd nonprod        
+        cd ${{ github.event.inputs.environment }}        
         terraform init 
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -54,7 +64,9 @@ jobs:
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      run: terraform fmt -check
+      run: |
+        cd ${{ github.event.inputs.environment }} 
+        terraform fmt -check
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -64,7 +76,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
-        cd nonprod
+        cd ${{ github.event.inputs.environment }}
         terraform plan -input=false
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -75,7 +87,7 @@ jobs:
     # Apply the Terraform Code
     - name: Terraform Apply
       run: |
-        cd nonprod
+        cd ${{ github.event.inputs.environment }}
         terraform apply -auto-approve -input=false
       env: 
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
