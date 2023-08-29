@@ -59,4 +59,27 @@ resource "databricks_permissions" "can_use_cluster_policyinstance_profile" {
   }
 }
 
+resource "databricks_metastore" "dpaas" {
+  name = "primary"
+  storage_root = format("abfss://%s@%s.dfs.core.windows.net/",
+    azurerm_storage_container.blob.name,
+  azurerm_storage_account.sa.name)
+  owner         = "uc admins"
+  region        = var.region
+  force_destroy = true
+}
+
+resource "databricks_metastore_assignment" "dpaas" {
+  metastore_id = databricks_metastore.dpaas.id
+  workspace_id = azurerm_databricks_workspace.dpaas.id
+}
+
+resource "databricks_catalog" "dpaas" {
+  metastore_id = databricks_metastore.dpaas.id
+  name         = "nonprod"
+  comment      = "this catalog is managed by terraform"
+  properties = {
+    purpose = "nonprod"
+  }
+}
 
