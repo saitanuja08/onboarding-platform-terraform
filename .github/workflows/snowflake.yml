@@ -1,1 +1,137 @@
+name: Deploy Snowflake Infrastructure
 
+ 
+
+on:
+
+  push:
+
+    branches:
+
+      - master
+
+      - develop
+
+      - qa
+
+    paths:
+
+      - 'infra/**'
+
+  workflow_dispatch:
+
+ 
+
+env:
+
+  SNOWFLAKE_ACCOUNT: sl38675.east-us-2.azure
+
+  SNOWFLAKE_USER: SCHEMA_CHANGE_TEST_USER
+
+  SNOWFLAKE_ROLE: DATAOPS_ADMIN
+
+  SNOWFLAKE_WH: EDW_ENGINEER_WH_S
+
+  SNOWFLAKE_DB.SCHEMACHANGE.CHANGE_HISTORY: ADMIN_UTILS.SCHEMACHANGE.CHANGE_HISTORY
+
+ 
+
+jobs:
+
+  deploy:
+
+    runs-on: [ self-hosted, azure ]
+
+    name: ${{github.base_ref}} deploy
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+
+        id: python
+
+        uses: actions/setup-python@v2
+
+        with:
+
+          python-version: 3.8
+
+      - name: Authenticate Vault
+
+        uses: hashicorp/vault-action@v2.2.0
+
+        with:
+
+          url: https://vault.tools.dcsg.com
+
+          method: approle
+
+          exportToken: true
+
+          roleId: ${{ secrets.VAULT_ROLE_ID }}
+
+          secretId: ${{ secrets.VAULT_SECRET_ID }}
+
+          secrets: |
+
+            /concourse/dataops/prod/service_accounts/snowflake/${{ env.SNOWFLAKE_USER }} value | SNOWFLAKE_PASSWORD;
+
+      - name: Set DEV Infra deploy env
+
+        if: ${{github.ref_name == 'develop'}}
+
+        run: |
+
+          echo "DEV" >> $DEPLOY_ENV          
+
+      - name: Set QA Infra deploy env
+
+        if: ${{github.ref_name == 'qa'}}
+
+        run: |
+
+           echo "QA" >> $DEPLOY_ENV        
+
+      - name: Set PROD Infra deploy env
+
+        if: ${{github.ref_name == 'master'}}
+
+        run: |
+
+           echo "PROD" >> $DEPLOY_ENV          
+
+      - name: Install dependencies
+
+        run: |
+
+          pip install cryptography==38.0.1
+
+          pip install schemachange
+
+ 
+
+ 
+
+      - name: run schemachange!
+
+        run: |
+
+          schemachange --config-folder $GITHUB_WORKSPACE/infra \
+
+          -m $GITHUB_WORKSPACE/infra/modules \
+
+          -f $GITHUB_WORKSPACE/infra/scripts \
+
+          -a $SNOWFLAKE_ACCOUNT \
+
+          -u $SNOWFLAKE_USER \
+
+          -r $SNOWFLAKE_ROLE \
+
+          -w $SNOWFLAKE_WH \
+
+          -c $SNOWFLAKE_DB.SCHEMACHANGE.CHANGE_HISTORY \
+
+          --create-change-history-table
