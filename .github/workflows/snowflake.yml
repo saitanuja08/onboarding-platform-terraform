@@ -1,4 +1,4 @@
-name: snowflake-devops-demo
+name: snowflake_infra
 
 # Controls when the action will run. 
 on:
@@ -13,7 +13,7 @@ on:
 
 jobs:
   deploy-snowflake-changes-job:
-    runs-on: [ self-hosted, azure ]
+    runs-on: [ ubuntu latest ]
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
