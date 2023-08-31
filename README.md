@@ -10,4 +10,3 @@ There is an GitHub Action created for applying the Terraform Code.
 
 The content is only a base structure and would need further refinement.
 
-
