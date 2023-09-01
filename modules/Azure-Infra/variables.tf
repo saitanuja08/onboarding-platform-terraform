@@ -90,12 +90,4 @@ variable "object_id" {
   default     = "acbe24ba-c58c-4ad5-ab1e-431ad2ea8af2"
 }
 
-variable "azure_client_id" {
-  description = "Azure Service Principal Client ID"
-}
-
-variable "azure_client_secret" {
-  description = "Azure Service Principal Client Secret"
-}
-
 
