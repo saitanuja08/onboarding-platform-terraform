@@ -107,6 +107,7 @@ resource "azurerm_storage_account" "sa" {
   location                 = "eastus"
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  public_network_access_enabled = true
 }
 
 # Create the Blob Storage in the Storage Account
