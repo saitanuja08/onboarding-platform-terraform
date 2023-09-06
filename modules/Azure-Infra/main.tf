@@ -205,15 +205,15 @@ resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
   object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions = [
-    "get", "list", "update", "create", "import", "delete", "recover", "backup", "restore",
+    "Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore",
   ]
 
   secret_permissions = [
-    "get", "list", "delete", "recover", "backup", "restore", "set",
+    "Get", "List", "Delete", "Recover", "Backup", "Restore", "Set",
   ]
 
   certificate_permissions = [
-    "get", "list", "update", "create", "import", "delete", "recover", "backup", "restore", "deleteissuers", "getissuers", "listissuers", "managecontacts", "manageissuers", "setissuers",
+    "Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore", "DeleteIssuers", "GetIssuers", "ListIssuers", "ManageContacts", "ManageIssuers", "SetIssuers",
   ]
 }
 
