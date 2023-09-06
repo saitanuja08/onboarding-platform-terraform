@@ -199,6 +199,24 @@ resource "azurerm_key_vault" "vault" {
   }
 }
 
+resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions = [
+    "get", "list", "update", "create", "import", "delete", "recover", "backup", "restore",
+  ]
+
+  secret_permissions = [
+    "get", "list", "delete", "recover", "backup", "restore", "set",
+  ]
+
+  certificate_permissions = [
+    "get", "list", "update", "create", "import", "delete", "recover", "backup", "restore", "deleteissuers", "getissuers", "listissuers", "managecontacts", "manageissuers", "setissuers",
+  ]
+}
+
 resource "azurerm_key_vault_key" "key" {
   name = "poc-kv-key"
 
