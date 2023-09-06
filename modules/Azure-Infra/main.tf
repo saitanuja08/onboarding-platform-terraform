@@ -183,7 +183,7 @@ resource "azurerm_storage_blob" "upload" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "vault" {
-  name                       = "poc-key-vault"
+  name                       = "poc-tan-key-vault"
   location                   = "eastus"
   resource_group_name        = "onboarding-rg"
   tenant_id                  = var.tenant_id
