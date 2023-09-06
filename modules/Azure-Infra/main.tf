@@ -200,7 +200,7 @@ resource "azurerm_key_vault" "vault" {
 }
 
 resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
-  key_vault_id = azurerm_key_vault.key_vault.id
+  key_vault_id = azurerm_key_vault.vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
 
