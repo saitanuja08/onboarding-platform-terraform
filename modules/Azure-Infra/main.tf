@@ -9,13 +9,13 @@ resource "azurerm_virtual_network" "poc_vnet" {
   name                = "poc-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = "eastus"
-  resource_group_name = "onbaording-rg"
+  resource_group_name = "onboarding-rg"
 }
 
 # Create Private Subnet1
 resource "azurerm_subnet" "private_subnet_1" {
   name                 = "private-subnet-1"
-  resource_group_name  = "onbaording-rg"
+  resource_group_name  = "onboarding-rg"
   virtual_network_name = azurerm_virtual_network.poc_vnet.name
   address_prefixes     = ["10.0.3.0/24"]
 }
@@ -23,7 +23,7 @@ resource "azurerm_subnet" "private_subnet_1" {
 # Create Private Subnet2
 resource "azurerm_subnet" "private_subnet_2" {
   name                 = "private-subnet-2"
-  resource_group_name  = "onbaording-rg"
+  resource_group_name  = "onboarding-rg"
   virtual_network_name = azurerm_virtual_network.poc_vnet.name
   address_prefixes     = ["10.0.4.0/24"]
 }
@@ -31,7 +31,7 @@ resource "azurerm_subnet" "private_subnet_2" {
 # Create Public Subnet1
 resource "azurerm_subnet" "public_subnet_1" {
   name                 = "public-subnet-1"
-  resource_group_name  = "onbaording-rg"
+  resource_group_name  = "onboarding-rg"
   virtual_network_name = azurerm_virtual_network.poc_vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
@@ -39,7 +39,7 @@ resource "azurerm_subnet" "public_subnet_1" {
 # Create Public Subnet2
 resource "azurerm_subnet" "public_subnet_2" {
   name                 = "public-subnet-2"
-  resource_group_name  = "onbaording-rg"
+  resource_group_name  = "onboarding-rg"
   virtual_network_name = azurerm_virtual_network.poc_vnet.name
   address_prefixes     = ["10.0.2.0/24"]
 }
@@ -48,7 +48,7 @@ resource "azurerm_subnet" "public_subnet_2" {
 resource "azurerm_route_table" "public_route_table" {
   name                = "public-rt"
   location            = "eastus"
-  resource_group_name = "onbaording-rg"
+  resource_group_name = "onboarding-rg"
 
   route {
     name           = "default"
@@ -97,13 +97,13 @@ resource "azuread_group_member" "usr" {
 resource "azurerm_log_analytics_workspace" "la" {
   name                = "poc-log-analytics-workspace"
   location            = "eastus"
-  resource_group_name = "onbaording-rg"
+  resource_group_name = "onboarding-rg"
 }
 
 # Create the Storage Account
 resource "azurerm_storage_account" "sa" {
   name                     = "poctanujstorageaccount"
-  resource_group_name      = "onbaording-rg"
+  resource_group_name      = "onboarding-rg"
   location                 = "eastus"
   account_tier             = "Standard"
   account_replication_type = "LRS"
@@ -185,7 +185,7 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_key_vault" "vault" {
   name                       = "poc-keyvault"
   location                   = "eastus"
-  resource_group_name        = "onbaording-rg"
+  resource_group_name        = "onboarding-rg"
   tenant_id                  = var.tenant_id
   sku_name                   = var.sku_name
   soft_delete_retention_days = 7
