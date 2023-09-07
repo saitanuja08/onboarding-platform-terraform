@@ -9,3 +9,7 @@ variable "team" {
 variable "policy_overrides" {
   description = "Cluster policy overrides"
 }
+
+variable "tags" {
+ type = string
+}

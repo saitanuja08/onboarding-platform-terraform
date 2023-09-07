@@ -20,6 +20,17 @@ data "databricks_user" "usr" {
   user_name = "me@example.com" # This is just a placeholder. Please update the value to an actual username before running the code.
 }
 
+data "azurerm_storage_account" "sa" {
+  name                     = "poctanujstorageaccount"
+  resource_group_name      = "onboarding-rg"
+}
+
+data "azurerm_storage_container" "blob" {
+  name                  = "poc-blob"
+  storage_account_name  = data.azurerm_storage_account.sa.name
+}
+
+
 resource "azurerm_resource_group" "dpaas" {
   name     = "DPaaS-workspace-rg"
   location = var.region
@@ -41,7 +52,7 @@ resource "databricks_cluster" "shared_autoscaling" {
   autotermination_minutes = 20
 }
 resource "databricks_entitlements" "me" {
-  user_id                    = data.databricks_user.me.id
+  user_id                    = data.databricks_user.usr.id
   allow_cluster_create       = true
   allow_instance_pool_create = true
 }
@@ -62,8 +73,8 @@ resource "databricks_permissions" "can_use_cluster_policyinstance_profile" {
 resource "databricks_metastore" "dpaas" {
   name = "primary"
   storage_root = format("abfss://%s@%s.dfs.core.windows.net/",
-    azurerm_storage_container.blob.name,
-  azurerm_storage_account.sa.name)
+    data.azurerm_storage_container.blob.name,
+  data.azurerm_storage_account.sa.name)
   owner         = "uc admins"
   region        = var.region
   force_destroy = true
