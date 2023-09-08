@@ -19,7 +19,7 @@ env:
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
-  TF_Workspace: "${GITHUB_WORKSPACE}/${{ github.event.inputs.environment }}"
+  TF_Workspace: "${GITHUB_WORKSPACE}/${{ github.event.inputs.environment }}/azure-infra/"
 
 jobs:
   terraform:
