@@ -51,6 +51,7 @@ jobs:
 
     - name: Terraform Init
       run: |
+        working-directory: ${{ env.TF_Workspace }}
         terraform init 
 
     - name: Terraform Plan
