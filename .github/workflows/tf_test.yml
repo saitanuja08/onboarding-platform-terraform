@@ -21,6 +21,10 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.TF_Workspace }}
+
 
     env: 
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
