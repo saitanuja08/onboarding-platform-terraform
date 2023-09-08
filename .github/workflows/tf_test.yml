@@ -50,6 +50,8 @@ jobs:
       run: |
         cd ${{ env.TF_Workspace }}
         echo "TF_Workspace is ${{ env.TF_Workspace }}"
+        ls -la   # List files and directories in the current directory
+        pwd      # Print the current working directory        
 
     - name: Terraform Init
       run: |
