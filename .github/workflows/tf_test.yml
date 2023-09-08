@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'tf-test'
 
 on:
   workflow_dispatch:
@@ -48,6 +48,7 @@ jobs:
     - name: Terraform Init
       run: |
         cd ${{ github.event.inputs.environment }}
+        echo "${{ github.event.inputs.environment }}"
         terraform init 
 
     - name: Terraform Plan
