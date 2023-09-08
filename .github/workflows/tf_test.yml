@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ env.TF_Workspace }}
+        working-directory: onboarding-platform-terraform/onboarding-platform-terraform/nonprod/azure-infra
 
 
     env: 
