@@ -67,7 +67,6 @@ jobs:
       run: |
         cd ${{ env.TF_Workspace }}
         terraform apply -auto-approve -input=false || true
-        continue-on-error: true
   terraform_destroy:
 
     runs-on: ubuntu-latest
