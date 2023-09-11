@@ -1,4 +1,4 @@
-name: 'Create Databricks Infra'
+name: 'Create Data bricks Infra'
 on:
   # push:
   #   branches: [ "main" ]
