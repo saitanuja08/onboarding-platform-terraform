@@ -1,0 +1,25 @@
+name: Deploy Airflow DAGs
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Astronomer
+        env:
+          ASTRONOMER_API_KEY: ${{ secrets.ASTRONOMER_API_KEY }}
+          ASTRONOMER_CLUSTER_URL: ${{ secrets.ASTRONOMER_CLUSTER_URL }}
+        run: |
+          # Install the Astronomer CLI
+          curl -sSL https://install.astronomer.io | sudo bash
+
+          # Authenticate with Astronomer
+          astro auth login
+
+          # Deploy  DAGs
+          astro deployment trigger $ASTRONOMER_CLUSTER_URL --repo . --ref main
