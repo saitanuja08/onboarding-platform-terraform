@@ -1,4 +1,32 @@
 module azure-infra {
   source = "../../modules/azure-infra"
-  usernames = ["AD-User1", "AD-User2", "AD-User3", "AD-User4", "AD-User5"]
+  vnet_name = var.vnet_name
+  public_subnet1_name = var.public_subnet1_name
+  public_subnet2_name = var.public_subnet2_name
+  private_subnet1_name = var.private_subnet1_name
+  private_subnet2_name = var.private_subnet2_name
+  route_table_name = var.route_table_name
+  vnet_cidr = var.vnet_cidr
+  public_subnet1_cidr = var.public_subnet1_cidr
+  public_subnet2_cidr = var.public_subnet2_cidr
+  private_subnet1_cidr = var.private_subnet1_cidr
+  private_subnet2_cidr = var.private_subnet2_cidr
+  resource_group_name = var.resource_group_name
+  location = var.location
+  log_analytics_workspace_name = var.log_analytics_workspace_name
+  storage_account_name = var.storage_account_name
+  storage_container_name = var.storage_container_name
+  key_vault_name = var.key_vault_name
+  key_vault_key_name = var.key_vault_key_name
+  sku_name = var.sku_name
+  key_permissions = var.key_permissions
+  secret_permissions = var.secret_permissions
+  certificate_permissions = var.certificate_permissions
+  tenant_id = var.tenant_id
+  object_id = var.object_id
+  sp_display_name = var.sp_display_name
+  key_type = var.key_type
+  key_ops = var.key_ops
+  key_size = var.key_size
+  azuread_users = var.azuread_users
 }
