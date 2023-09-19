@@ -15,8 +15,10 @@ on:
 
 permissions:
   contents: read
-
+  
 env:
+  AZ_TF_Workspace: '${GITHUB_WORKSPACE}/${{ env.AZ_TF_Workspace }}/'
+  Databricks_TF_Workspace: '${GITHUB_WORKSPACE}/${{ env.Databricks_TF_Workspace }}/'
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
@@ -27,7 +29,12 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: production
+    env: 
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -55,7 +62,7 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init - Azure Infra
       run: |
-        cd ${{ github.event.inputs.environment }}/azure-infra       
+        cd ${{ env.AZ_TF_Workspace }}       
         terraform init 
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -66,7 +73,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan - Azure Infra
       run: |
-        cd ${{ github.event.inputs.environment }}/azure-infra
+        cd ${{ env.AZ_TF_Workspace }}
         terraform plan -input=false
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -77,7 +84,7 @@ jobs:
     # Apply the Terraform Code
     - name: Terraform Apply - Azure Infra
       run: |
-        cd ${{ github.event.inputs.environment }}/azure-infra
+        cd ${{ env.AZ_TF_Workspace }}
         terraform apply -auto-approve -input=false
       env: 
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -88,7 +95,7 @@ jobs:
     # Initialize Terraform for Databricks
     - name: Terraform Init - Databricks
       run: |
-        cd ${{ github.event.inputs.environment }}/databricks     
+        cd ${{ env.Databricks_TF_Workspace }}     
         terraform init 
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -99,7 +106,7 @@ jobs:
     # Generates an execution plan for Databricks
     - name: Terraform Plan - Databricks
       run: |
-        cd ${{ github.event.inputs.environment }}/databricks
+        cd ${{ env.Databricks_TF_Workspace }}
         terraform plan -input=false
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -110,7 +117,7 @@ jobs:
     # Apply the Terraform Code pertaining to Databricks
     - name: Terraform Apply - Databricks
       run: |
-        cd ${{ github.event.inputs.environment }}/databricks
+        cd ${{ env.Databricks_TF_Workspace }}
         terraform apply -auto-approve -input=false
       env: 
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
