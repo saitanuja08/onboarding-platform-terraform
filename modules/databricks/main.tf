@@ -3,13 +3,6 @@ data "azurerm_storage_account" "sa" {
   resource_group_name      = "onboarding-rg"
 }
 
-data "azurerm_storage_container" "blob" {
-  name                  = "poc-blob"
-  storage_account_name  = data.azurerm_storage_account.sa.name
-  resource_group_name      = "onboarding-rg"
-}
-
-
 resource "azurerm_resource_group" "dpaas" {
   name     = var.databricks_resource_group
   location = var.region
