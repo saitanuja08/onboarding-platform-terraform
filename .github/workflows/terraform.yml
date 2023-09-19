@@ -1,4 +1,4 @@
-name: 'Azure-Infra'
+name: 'Create Azure and Databricks Infra'
 on:
   # push:
   #   branches: [ "main" ]
