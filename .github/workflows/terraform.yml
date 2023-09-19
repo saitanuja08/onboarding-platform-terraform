@@ -53,7 +53,7 @@ jobs:
       run: az login --service-principal -u "${ARM_CLIENT_ID}" -p "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}" >/dev/null
         
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
+    - name: Terraform Init - Azure Infra
       run: |
         cd ${{ github.event.inputs.environment }}/azure-infra       
         terraform init 
@@ -64,7 +64,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Generates an execution plan for Terraform
-    - name: Terraform Plan
+    - name: Terraform Plan - Azure Infra
       run: |
         cd ${{ github.event.inputs.environment }}/azure-infra
         terraform plan -input=false
@@ -75,7 +75,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Apply the Terraform Code
-    - name: Terraform Apply
+    - name: Terraform Apply - Azure Infra
       run: |
         cd ${{ github.event.inputs.environment }}/azure-infra
         terraform apply -auto-approve -input=false
@@ -86,7 +86,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         
     # Initialize Terraform for Databricks
-    - name: Terraform Init
+    - name: Terraform Init - Databricks
       run: |
         cd ${{ github.event.inputs.environment }}/databricks     
         terraform init 
@@ -97,7 +97,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Generates an execution plan for Databricks
-    - name: Terraform Plan
+    - name: Terraform Plan - Databricks
       run: |
         cd ${{ github.event.inputs.environment }}/databricks
         terraform plan -input=false
@@ -108,7 +108,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Apply the Terraform Code pertaining to Databricks
-    - name: Terraform Apply
+    - name: Terraform Apply - Databricks
       run: |
         cd ${{ github.event.inputs.environment }}/databricks
         terraform apply -auto-approve -input=false
