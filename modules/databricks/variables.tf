@@ -2,15 +2,18 @@ variable "region" {
   type = string
 }
 
-variable "team" {
-  description = "Team that performs the work"
+variable "databricks_resource_group" {
+  description = "Name of the Databricks Resource Group"
 }
 
-variable "policy_overrides" {
-  description = "Cluster policy overrides"
+variable "databricks_workspace_name" {
+  description = "Name of the Databricks Workspace"
+}
+
+variable "sku" {
+ type = string
 }
 
 variable "tags" {
  type = string
 }
-

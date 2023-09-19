@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Azure-Infra'
 on:
   # push:
   #   branches: [ "main" ]

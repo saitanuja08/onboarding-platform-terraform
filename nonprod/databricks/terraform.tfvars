@@ -1,4 +1,6 @@
+sku="premium"
 region="eastus"
-team="hvdf"
-policy_overrides="true"
-tags="development"
+tags="env=development"
+databricks_resource_group="DPaaS-workspace-rg"
+databricks_workspace_name="DPaaS-workspace"
+
