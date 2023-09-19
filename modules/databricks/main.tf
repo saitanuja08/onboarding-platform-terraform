@@ -6,6 +6,7 @@ data "azurerm_storage_account" "sa" {
 data "azurerm_storage_container" "blob" {
   name                  = "poc-blob"
   storage_account_name  = data.azurerm_storage_account.sa.name
+  resource_group_name      = "onboarding-rg"
 }
 
 
