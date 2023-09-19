@@ -84,8 +84,36 @@ jobs:
         ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        
+    # Initialize Terraform for Databricks
+    - name: Terraform Init
+      run: |
+        cd ${{ github.event.inputs.environment }}/databricks     
+        terraform init 
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
-    - name: Trigger Downstream Workflow
-      uses: actions/workflow-dispatch@v2
-      with:
-        workflow: "Create Databricks Infra"
+    # Generates an execution plan for Databricks
+    - name: Terraform Plan
+      run: |
+        cd ${{ github.event.inputs.environment }}/databricks
+        terraform plan -input=false
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+    # Apply the Terraform Code pertaining to Databricks
+    - name: Terraform Apply
+      run: |
+        cd ${{ github.event.inputs.environment }}/databricks
+        terraform apply -auto-approve -input=false
+      env: 
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
