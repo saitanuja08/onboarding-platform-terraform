@@ -70,20 +70,22 @@ jobs:
 
     - name: Terraform Destroy
       run: |
+        if: ${{ github.event.inputs.destroy_resources == 'true' }}
         cd ${{ env.TF_Workspace }} && terraform destroy -auto-approve
-  terraform_destroy:
 
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.destroy_resources == true }}
-    steps:
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+  # terraform_destroy:
 
-    - name: Terraform Init (Destroy)
-      run: |
-        cd ${{ env.TF_Workspace }}
-        terraform init -force-copy
+  #   runs-on: ubuntu-latest
+  #   if: ${{ github.event.inputs.destroy_resources == true }}
+  #   steps:
+  #   - name: Set up Terraform
+  #     uses: hashicorp/setup-terraform@v1
 
-    - name: Terraform Destroy
-      run: |
-        cd ${{ env.TF_Workspace }} && terraform destroy -auto-approve
+  #   - name: Terraform Init (Destroy)
+  #     run: |
+  #       cd ${{ env.TF_Workspace }}
+  #       terraform init -force-copy
+
+  #   - name: Terraform Destroy
+  #     run: |
+  #       cd ${{ env.TF_Workspace }} && terraform destroy -auto-approve
