@@ -3,6 +3,7 @@ module databricks {
   region  		    = var.region
   sku 			    = var.sku
   databricks_workspace_name = var.databricks_workspace_name
-  databricks_resource_group = var.databricks_resource_group
+  resource_group_name       = var.resource_group_name
+  storage_account_name      = var.storage_account_name
   tags 			    = var.tags
 }

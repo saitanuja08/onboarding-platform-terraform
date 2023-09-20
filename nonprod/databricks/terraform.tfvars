@@ -1,6 +1,6 @@
 sku="premium"
 region="eastus"
 tags="env=development"
-databricks_resource_group="DPaaS-workspace-rg"
+resource_group_name="poc-rg"
+storage_account_name="poctanujstorageaccount"
 databricks_workspace_name="DPaaS-workspace"
-

@@ -1,8 +1,8 @@
 # Create the Resource Group
-#resource azurerm_resource_group rg {
-#  name                         = "poc-rg"
-#  location                     = var.location
-#}
+resource azurerm_resource_group rg {
+  name                         = var.resource_group_name
+  location                     = var.location
+}
 
 # Create VNet
 resource "azurerm_virtual_network" "poc_vnet" {
@@ -10,6 +10,8 @@ resource "azurerm_virtual_network" "poc_vnet" {
   address_space       = var.vnet_cidr
   location            = var.location
   resource_group_name = var.resource_group_name
+
+  depends_on = [azurerm_resource_group.rg] 
 }
 
 # Create Private Subnet1
@@ -55,6 +57,8 @@ resource "azurerm_route_table" "public_route_table" {
     address_prefix = "0.0.0.0/0"
     next_hop_type  = "Internet"
   }
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 # Associate Route Table with Public Subnet1
@@ -96,6 +100,8 @@ resource "azurerm_log_analytics_workspace" "la" {
   name                = var.log_analytics_workspace_name
   location            = var.location
   resource_group_name = var.resource_group_name
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 # Create the Storage Account
@@ -105,6 +111,8 @@ resource "azurerm_storage_account" "sa" {
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 # Create the Blob Storage in the Storage Account
@@ -121,6 +129,8 @@ resource "azurerm_key_vault" "vault" {
   resource_group_name        = var.resource_group_name
   tenant_id                  = var.tenant_id
   sku_name                   = var.sku_name
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 # Create Key Vault Policy

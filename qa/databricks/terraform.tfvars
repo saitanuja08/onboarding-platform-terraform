@@ -1,4 +1,5 @@
+sku="premium"
 region="eastus"
-team="hvdf"
-policy_overrides="true"
-tags="development"
+tags="env=development"
+resource_group_name="poc-rg"
+storage_account_name="poctanujstorageaccount"
