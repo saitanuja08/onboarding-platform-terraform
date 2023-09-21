@@ -1,4 +1,4 @@
-name: 'create selective resources'
+name: 'Create Selective Resources'
 on:
   # push:
   #   branches: [ "main" ]
@@ -28,6 +28,7 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   
+  
 
 jobs:
   terraform:
@@ -47,7 +48,8 @@ jobs:
       
     # Install Terraform
     - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v1     
+
 
     # Install Azure CLI
     - name: Install Azure CLI
@@ -57,6 +59,21 @@ jobs:
     # Login to Azure
     - name: Login to Azure 
       run: az login --service-principal -u "${ARM_CLIENT_ID}" -p "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}" >/dev/null
+      
+    # Map the Input Value
+    - name: Set Mapped Value
+      id: set-mapped-value
+      run: |
+        input_value="${{ github.event.inputs.resource }}"
+        mapped_value=""
+        
+        if [ "$input_value" == "vnet" ]; then
+          mapped_value="module.azure-infra.azurerm_virtual_network.poc_$input_value"
+        fi
+        
+        echo "::set-output name=mapped-output::$mapped_value"
+      env:
+        my-input: ${{ github.event.inputs.my-input }}
         
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init - Azure Infra
@@ -72,8 +89,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan - Azure Infra
       run: |
+        mapped_value="${{ steps.set-mapped-value.outputs.mapped-output }}"
         cd ${{ github.event.inputs.environment }}/azure-infra
-        terraform plan -target=${{ github.event.inputs.resource }} -var-file=terraform.tfvars
+        terraform plan -target=$mapped_value -var-file=terraform.tfvars
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
