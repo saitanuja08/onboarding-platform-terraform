@@ -102,8 +102,9 @@ jobs:
     # Apply the Terraform Code
     - name: Terraform Apply - Azure Infra
       run: |
+        mapped_value="${{ steps.set-mapped-value.outputs.mapped-output }}"
         cd ${{ github.event.inputs.environment }}/azure-infra
-        terraform apply -target=${{ github.event.inputs.resource }} -var-file=terraform.tfvars --auto-approve
+        terraform apply -target=$mapped_value -var-file=terraform.tfvars --auto-approve
       env: 
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
