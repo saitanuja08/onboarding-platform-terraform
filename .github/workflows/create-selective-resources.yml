@@ -17,8 +17,14 @@ on:
         description: Choose the resource to create
         options:
         - vnet
-        #- module.azure-infra.azurerm_virtual_network.poc_vnet
-        - module.azure-infra.azurerm_storage_account.sa 
+        - key_vault
+        - route_table
+        - resource_group
+        - storage_account
+        - storage_container
+        - log_analytics_workspace
+        - key_vault_access_policy
+        - key_vault_service_principal_access_policy
 
 permissions:
   contents: read
@@ -68,9 +74,42 @@ jobs:
         input_value="${{ github.event.inputs.resource }}"
         mapped_value=""
         
-        if [ "$input_value" == "vnet" ]; then
-          mapped_value="module.azure-infra.azurerm_virtual_network.poc_$input_value"
-        fi
+        #if [ "$input_value" == "vnet" ]; then
+        #  mapped_value="module.azure-infra.azurerm_virtual_network.$input_value"
+        #fi
+        case "$input_value" in
+          "vnet")
+            mapped_value="module.azure-infra.azurerm_virtual_network.$input_value"
+            ;;
+          "key_vault")
+            mapped_value="module.azure-infra.azurerm_key_vault.$input_value"
+            ;;
+          "route_table")
+            mapped_value="module.azure-infra.azurerm_route_table.$input_value"
+            ;;
+          "resource_group")
+            mapped_value="module.azure-infra.azurerm_resource_group.$input_value"
+            ;;
+          "storage_account")
+            mapped_value="module.azure-infra.azurerm_storage_account.$input_value"
+            ;;
+          "storage_container")
+            mapped_value="module.azure-infra.azurerm_storage_container.$input_value"
+            ;;
+          "log_analytics_workspace")
+            mapped_value="module.azure-infra.azurerm_log_analytics_workspace.$input_value"
+            ;;
+          "key_vault_access_policy")
+            mapped_value="module.azure-infra.azurerm_key_vault_access_policy.$input_value"
+            ;;
+          "key_vault_service_principal_access_policy")
+            mapped_value="module.azure-infra.azurerm_key_vault_access_policy.$input_value"
+            ;;
+          *)
+            echo "Input value '$input_value' not recognized"
+            exit 1
+            ;;
+        esac
         
         echo "::set-output name=mapped-output::$mapped_value"
       env:
