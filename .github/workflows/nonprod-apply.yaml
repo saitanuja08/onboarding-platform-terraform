@@ -1,0 +1,71 @@
+name: Non Prod Apply
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "nonprod/**"
+  workflow_dispatch:
+defaults:
+  run:
+    working-directory: "nonprod"
+
+env:
+  TF_VAR_github_repository: ${{github.repository}}
+
+jobs:
+  terraform:
+    runs-on: [self-hosted, azure]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Authenticate Vault
+        uses: hashicorp/vault-action@v2.2.0
+        with:
+          url: https://vault.tools.dcsg.com
+          method: approle
+          exportToken: true
+          roleId: ${{ secrets.VAULT_ROLE_ID }}
+          secretId: ${{ secrets.VAULT_SECRET_ID }}
+          secrets: |
+            /concourse/dataops/dev/azure-app-registration/dataops-infra-dev clientId | ARM_CLIENT_ID;
+            /concourse/dataops/dev/azure-app-registration/dataops-infra-dev clientSecret | ARM_CLIENT_SECRET;
+            /concourse/dataops/azure/subscriptions sub-data-analytics-nonprod-1 | ARM_SUBSCRIPTION_ID;
+            /concourse/dataops/dev/azure-app-registration/dataops-infra-dev tenantId | ARM_TENANT_ID;
+            /concourse/dataops/azure/storage-account/stdsgdataplatforminfra primary_access_key | ARM_ACCESS_KEY;
+            /concourse/dataops/dev/github_tokens srv-dataops-adf-dev | TF_VAR_github_token;
+            /concourse/dataops/vault/approle/dataops-approle role_id | TF_VAR_login_approle_role_id;
+            /concourse/dataops/vault/approle/dataops-approle secret_id | TF_VAR_login_approle_secret_id;
+
+      - name: Git Config
+        run: |
+          git config --global url."https://AccessToken:${GH_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+        env:
+          GH_TOKEN: ${{ env.TF_VAR_github_token }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: v0.15.3
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init --upgrade
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Apply
+
+        if: github.ref == 'refs/heads/master'
+        run: terraform apply -auto-approve
