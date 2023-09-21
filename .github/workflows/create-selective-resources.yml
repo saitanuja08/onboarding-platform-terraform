@@ -16,7 +16,8 @@ on:
         type: choice
         description: Choose the resource to create
         options:
-        - module.azure-infra.azurerm_virtual_network.poc_vnet
+        - vnet
+        #- module.azure-infra.azurerm_virtual_network.poc_vnet
         - module.azure-infra.azurerm_storage_account.sa 
 
 permissions:
