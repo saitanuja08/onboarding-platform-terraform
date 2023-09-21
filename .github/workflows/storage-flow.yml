@@ -1,4 +1,4 @@
-name: 'storage-test'
+name: 'storage-flow'
 
 on:
   workflow_dispatch:
