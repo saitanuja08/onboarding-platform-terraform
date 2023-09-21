@@ -1,6 +1,9 @@
 name: 'storage-flow'
 
 on:
+  push:
+    branches:
+      - dsgstrd
   workflow_dispatch:
     inputs:
       environment:
