@@ -1,22 +1,9 @@
-name: 'tf-storage-api'
+name: 'storage-flow'
 
 on:
-  repository_dispatch:
-    types:
-      - dsg-event
   push:
     branches:
       - dsgstrd
-
-workflow_dispatch:
-  inputs:
-    environment:
-      type: choice
-      description: Choose the environment to deploy the Terraform code
-      options: 
-        - nonprod
-        - qa
-        - prod
 
 permissions:
   contents: read
