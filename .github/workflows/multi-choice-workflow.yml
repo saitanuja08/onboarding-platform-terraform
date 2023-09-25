@@ -42,7 +42,7 @@ jobs:
                choices=""
                mapped_value=""
                if [ -z $mapped_value ]; then
-                 exit 0;
+                 echo "Do nothing"
                elif [ -z ${choices} && ![ -z $mapped_value] ]; then 
                  choices=$mapped_value
                  echo "choices in if: $choices"
