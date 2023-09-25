@@ -72,28 +72,18 @@ jobs:
         cd ${{ env.TF_Workspace }}/azure-infra/
         terraform apply -auto-approve -input=false || true
 
-    - name: Terraform Destroy
-      if: ${{ github.event.inputs.destroy_resources == 'true' }}
-      run: |
-        cd ${{ env.TF_Workspace }}/azure-infra/ && terraform destroy -auto-approve
 
-  databricks:
-
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.databricks == true }}
-    steps:
-
-    - name: Terraform Init (Destroy)
+    - name: Terraform Init - Databricks
       run: |
         cd ${{ env.TF_Workspace }}/databricks/
         terraform init -force-copy
 
-    - name: Terraform Plan
+    - name: Terraform Plan - Databricks
       run: |
         cd ${{ env.TF_Workspace }}/databricks/
         terraform plan -input=false
 
-    - name: Terraform Apply
+    - name: Terraform Apply - Databricks
       run: |
         cd ${{ env.TF_Workspace }}/databricks/
         terraform apply -auto-approve -input=false
