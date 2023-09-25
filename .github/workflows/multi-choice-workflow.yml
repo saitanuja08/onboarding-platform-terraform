@@ -39,11 +39,14 @@ jobs:
           IFS=',' read -ra resources <<< "$TF_RESOURCES"
              for resource in "${resources[@]}"; do
                echo "Processing resource: $resource"
-               if [ -z ${choices} ]; then 
+               choices=""
+               if [ -z $mapped_value ]; then
+                 exit 0;
+               elif [ -z ${choices} && ![ -z $mapped_value] ]; then 
                  choices=$mapped_value
                  echo "choices in if: $choices"
                else 
-                 choices=$choices,$mapped_value
+                 choices="$choices,$mapped_value"
                  echo "choices in else: $choices"
                fi
                case "$resource" in
