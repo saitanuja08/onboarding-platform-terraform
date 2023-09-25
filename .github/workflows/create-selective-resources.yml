@@ -76,9 +76,6 @@ jobs:
         input_value="${{ github.event.inputs.resource }}"
         mapped_value=""
         
-        #if [ "$input_value" == "vnet" ]; then
-        #  mapped_value="module.azure-infra.azurerm_virtual_network.$input_value"
-        #fi
         case "$input_value" in
           "vnet")
             mapped_value="module.azure-infra.azurerm_virtual_network.$input_value"

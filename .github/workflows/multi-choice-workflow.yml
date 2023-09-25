@@ -39,7 +39,46 @@ jobs:
           IFS=',' read -ra resources <<< "$TF_RESOURCES"
              for resource in "${resources[@]}"; do
                echo "Processing resource: $resource"
-               # Perform actions on $resource here
+               if [ -z ${choices} ]; then 
+                 choices=$mapped_value
+                 echo "choices in if: $choices"
+               else 
+                 choices=$choices,$mapped_value
+                 echo "choices in else: $choices"
+               fi
+               case "$resource" in
+                 "vnet")
+                   mapped_value="module.azure-infra.azurerm_virtual_network.$resource"
+                   ;;
+                 "key_vault")
+                   mapped_value="module.azure-infra.azurerm_key_vault.$resource"
+                   ;;
+                 "route_table")
+                   mapped_value="module.azure-infra.azurerm_route_table.$resource"
+                   ;;
+                 "resource_group")
+                   mapped_value="module.azure-infra.azurerm_resource_group.$resource"
+                   ;;
+                 "storage_account")
+                   mapped_value="module.azure-infra.azurerm_storage_account.$resource"
+                   ;;
+                 "storage_container")
+                   mapped_value="module.azure-infra.azurerm_storage_container.$resource"
+                   ;;
+                 "log_analytics_workspace")
+                   mapped_value="module.azure-infra.azurerm_log_analytics_workspace.$resource"
+                   ;;
+                 "key_vault_access_policy")
+                   mapped_value="module.azure-infra.azurerm_key_vault_access_policy.$resource"
+                   ;;
+                 "key_vault_service_principal_access_policy")
+                   mapped_value="module.azure-infra.azurerm_key_vault_access_policy.$resource"
+                   ;;
+                 *)
+                   echo "Input value '$input_value' not recognized"
+                   exit 1
+                   ;;
+               esac
              done
           echo ${{ github.event.inputs.resources}}
         env:
