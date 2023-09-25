@@ -40,6 +40,7 @@ jobs:
              for resource in "${resources[@]}"; do
                echo "Processing resource: $resource"
                choices=""
+               mapped_value=""
                if [ -z $mapped_value ]; then
                  exit 0;
                elif [ -z ${choices} && ![ -z $mapped_value] ]; then 
