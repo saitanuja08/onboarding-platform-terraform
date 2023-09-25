@@ -39,8 +39,6 @@ jobs:
           IFS=',' read -ra resources <<< "$TF_RESOURCES"
              for resource in "${resources[@]}"; do
                echo "Processing resource: $resource"
-               choices=""
-               mapped_value=""
                if [ -z $mapped_value ]; then
                  echo "Do nothing"
                elif [ -z ${choices} && ![ -z $mapped_value] ]; then 
