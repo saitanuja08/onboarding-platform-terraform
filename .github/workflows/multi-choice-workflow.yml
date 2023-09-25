@@ -38,16 +38,9 @@ jobs:
         run: |
           IFS=',' read -ra resources <<< "$TF_RESOURCES"
              for resource in "${resources[@]}"; do
-               echo "Processing resource: $resource"
-               if [ -z $mapped_value ]; then
-                 echo "Do nothing"
-               elif [ -z ${choices} && ![ -z $mapped_value] ]; then 
-                 choices=$mapped_value
-                 echo "choices in if: $choices"
-               else 
+               echo "Processing resource: $resource" 
                  choices="$choices,$mapped_value"
-                 echo "choices in else: $choices"
-               fi
+                 echo "choices: $choices"
                case "$resource" in
                  "vnet")
                    mapped_value="module.azure-infra.azurerm_virtual_network.$resource"
