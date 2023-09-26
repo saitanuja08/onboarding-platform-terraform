@@ -1,0 +1,126 @@
+name: tf-api
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Choose the environment to deploy the Terraform code
+        options: 
+        - nonprod
+        - qa
+        - prod        
+      resource_group:
+        description: 'Provision a resource group'
+        required: false
+      virtual_network:
+        description: 'Provision a virtual network'
+        required: false
+      key_vault:
+        description: 'Provision a key_vault'
+        required: false		  
+      route_table:
+        description: 'Provision a route_table'
+        required: false		  
+      storage_account:
+        description: 'Provision a storage_account'
+        required: false		  
+      storage_container:
+        description: 'Provision a storage_container'
+        required: false		  
+      log_analytics_workspace:
+        description: 'Provision a log_analytics_workspace'
+        required: false		  
+      key_vault_access_policy:
+        description: 'Provision a key_vault_access_policy'
+        required: false		  
+      key_vault_service_principal_access_policy:
+        description: 'Provision a key_vault_service_principal_access_policy'
+        required: false		  
+env:
+  TF_Workspace: '${GITHUB_WORKSPACE}/${{ github.event.inputs.environment }}'
+jobs:
+  provisioning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  
+      - name: Login to Azure 
+        run: az login --service-principal -u "${ARM_CLIENT_ID}" -p "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}" >/dev/null
+  
+      - name: Change directory to Terraform environment
+        run: |
+          cd ${{ env.TF_Workspace }}/azure-infra/
+          echo "TF_Workspace is ${{ env.TF_Workspace }}"
+          ls -la   # List files and directories in the current directory
+          pwd      # Print the current working directory   
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Conditionally Apply Terraform Modules
+        run: |
+          if [ -n "$INPUT_RESOURCE_GROUP" ]; then
+            cd resource-group
+            terraform apply -auto-approve
+            cd ..
+          fi
+          
+          if [ -n "$INPUT_VIRTUAL_NETWORK" ]; then
+            cd virtual-network
+            terraform apply -auto-approve
+            cd ..
+          fi
+          if [ -n "$INPUT_KEY_VAULT" ]; then
+            cd key-vault
+            terraform apply -auto-approve
+            cd ..
+          fi
+          if [ -n "$INPUT_ROUTE_TABLE" ]; then
+            cd route_table
+            terraform apply -auto-approve
+            cd ..
+          fi  
+          if [ -n "$INPUT_STORAGE_ACCOUNT" ]; then
+            cd storage_account
+            terraform apply -auto-approve
+            cd ..
+          fi     
+          if [ -n "$INPUT_STORAGE_CONTAINER" ]; then
+            cd storage_container
+            terraform apply -auto-approve
+            cd ..
+          fi
+          if [ -n "$INPUT_LOG_ANALYTICS_WORKSPACE" ]; then
+            cd log_analytics_workspace
+            terraform apply -auto-approve
+            cd ..
+          fi
+          if [ -n "$INPUT_KEY_VAULT_ACCESS_POLICY" ]; then
+            cd key_vault_access_policy
+            terraform apply -auto-approve
+            cd ..
+          fi
+          if [ -n "$INPUT_KEY_VAULT_SERVICE_PRINCIPAL_ACCESS_POLICY" ]; then
+            cd key_vault_service_principal_access_policy
+            terraform apply -auto-approve
+            cd ..
+          fi		  
+        env:
+          INPUT_RESOURCE_GROUP: ${{ github.event.inputs.resource_group }}
+          INPUT_VIRTUAL_NETWORK: ${{ github.event.inputs.virtual_network }}
+          INPUT_KEY_VAULT: ${{ github.event.inputs.key_vault }}
+          INPUT_ROUTE_TABLE: ${{ github.event.inputs.route_table }}
+          INPUT_STORAGE_ACCOUNT: ${{ github.event.inputs.storage_account }}
+          INPUT_STORAGE_CONTAINER: ${{ github.event.inputs.storage_container }}
+          INPUT_LOG_ANALYTICS_WORKSPACE: ${{ github.event.inputs.log_analytics_workspace }}
+          INPUT_KEY_VAULT_ACCESS_POLICY: ${{ github.event.inputs.key_vault_access_policy }}
+          INPUT_KEY_VAULT_SERVICE_PRINCIPAL_ACCESS_POLICY: ${{ github.event.inputs.key_vault_service_principal_access_policy }}
