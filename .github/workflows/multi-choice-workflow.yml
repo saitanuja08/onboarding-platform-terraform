@@ -28,6 +28,7 @@ on:
            - log_analytics_workspace
            - key_vault_access_policy
            - key_vault_service_principal_access_policy
+           Example: vnet,storage_account
            
 permissions:
   contents: read
@@ -68,9 +69,7 @@ jobs:
         id: set-map-value
         run: |
           IFS=',' read -ra resources <<< "$TF_RESOURCES"
-             for resource in "${resources[@]}"; do
-               echo "Processing resource: $resource" 
-                 
+             for resource in "${resources[@]}"; do                 
                case "$resource" in
                  "vnet")
                    mapped_value="$mapped_value,module.azure-infra.azurerm_virtual_network.$resource"
