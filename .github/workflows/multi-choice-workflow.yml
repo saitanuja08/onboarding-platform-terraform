@@ -87,13 +87,14 @@ jobs:
       - name: Terraform Plan - Azure Infra
         run: |
           mapped_values="${{ steps.set-mapped-value.outputs.mapped-output }}"
+          echo "mapped_values: $mapped_values"
           IFS=',' read -ra targets <<< "$mapped_values"
           for target in "${targets[@]}"; do
             echo "Processing target: $target"                
           done
-        
-        #cd ${{ github.event.inputs.environment }}/azure-infra
-        #terraform plan -target=$mapped_value -var-file=terraform.tfvars
+
+
+
            
           
          
