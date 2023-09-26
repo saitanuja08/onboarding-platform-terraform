@@ -85,7 +85,8 @@ jobs:
         run: |
           mapped_value="${{ steps.set-map-value.outputs.map-output }}"
           echo "mapped_value: $mapped_value"
-          echo $mapped_value | sed 's/,/-target= /g'
+          TARGET=`echo $mapped_value | sed 's/,/ -target=/g'`
+          echo "terraform plan $TARGET"
           #IFS=',' read -ra targets <<< "$mapped_value"
           #for target in "${targets[@]}"; do
           #  echo "Processing target: $target"                
