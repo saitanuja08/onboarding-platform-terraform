@@ -87,9 +87,9 @@ jobs:
       - name: Terraform Plan - Azure Infra
         run: |
           targets="${{ steps.set-mapped-value.outputs.mapped-output }}"
-          IFS=',' read -ra resources <<< "$targets"
+          IFS=',' read -ra "$targets"
                for target in "${targets[@]}"; do
-                 echo "Processing resource: $target"                
+                 echo "Processing target: $target"                
                done
         
         #cd ${{ github.event.inputs.environment }}/azure-infra
