@@ -74,15 +74,8 @@ jobs:
                    exit 1
                    ;;                   
                esac               
-             done
-             
-          # Remove the comma at the beginning of the string
-          if [[ "$mapped_value" == ,* ]]; then
-             mapped_value="${mapped_value#,}"
-          fi
-          echo "MAPPED_VALUE: $mapped_value"  
+             done  
           echo "::set-output name=map-output::$mapped_value"
-          echo "MAPPED_VALUE2: $mapped_value" 
           
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
@@ -92,10 +85,11 @@ jobs:
         run: |
           mapped_value="${{ steps.set-map-value.outputs.map-output }}"
           echo "mapped_value: $mapped_value"
-          IFS=',' read -ra targets <<< "$mapped_value"
-          for target in "${targets[@]}"; do
-            echo "Processing target: $target"                
-          done
+          echo $mapped_value | sed 's/,/-target= /g'
+          #IFS=',' read -ra targets <<< "$mapped_value"
+          #for target in "${targets[@]}"; do
+          #  echo "Processing target: $target"                
+          #done
 
 
 
