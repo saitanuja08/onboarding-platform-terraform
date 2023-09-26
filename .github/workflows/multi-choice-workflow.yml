@@ -81,6 +81,7 @@ jobs:
           fi
           echo "MAPPED_VALUE: $mapped_value"  
           echo "::set-output name=mapped-output::$mapped_value"
+          echo "MAPPED_VALUE2: $mapped_value" 
           
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
@@ -134,9 +135,9 @@ jobs:
       # Generates an execution plan for Terraform
       - name: Terraform Plan - Azure Infra
         run: |
-          map_value="${{ steps.set-map-value.outputs.map-output }}"
-          echo "map_value: $map_value"
-          IFS=',' read -ra targets <<< "$map_value"
+          mapped_value="${{ steps.set-mapped-value.outputs.mapped-output }}"
+          echo "mapped_value: $mapped_value"
+          IFS=',' read -ra targets <<< "$mapped_value"
           for target in "${targets[@]}"; do
             echo "Processing target: $target"                
           done
