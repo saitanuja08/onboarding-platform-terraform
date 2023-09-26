@@ -89,7 +89,7 @@ jobs:
       - name: Set Map Value
         id: set-map-value
         run: |
-          input_value="${{ github.event.inputs.resource }}"
+          input_value="${{ github.event.inputs.resources }}"
           mapped_value=""
           
           case "$input_value" in
