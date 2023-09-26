@@ -86,8 +86,8 @@ jobs:
       # Generates an execution plan for Terraform
       - name: Terraform Plan - Azure Infra
         run: |
-          targets="${{ steps.set-mapped-value.outputs.mapped-output }}"
-          IFS=',' read -ra $targets
+          mapped_values="${{ steps.set-mapped-value.outputs.mapped-output }}"
+          IFS=',' read -ra targets <<< "$mapped_values"
           for target in "${targets[@]}"; do
             echo "Processing target: $target"                
           done
