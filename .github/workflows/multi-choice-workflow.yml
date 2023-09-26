@@ -74,14 +74,26 @@ jobs:
                    ;;                   
                esac
              done
-             echo "MAPPED_VALUE: $mapped_value"
              # Remove the comma at the beginning of the string
              if [[ "$mapped_value" == ,* ]]; then
                   mapped_value="${mapped_value#,}"
              fi
              echo "MAPPED_VALUE: $mapped_value"
-          echo ${{ github.event.inputs.resources}}
+          echo "::set-output name=mapped-output::$mapped_value"
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
+             
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan - Azure Infra
+      run: |
+        targets="${{ steps.set-mapped-value.outputs.mapped-output }}"
+        IFS=',' read -ra resources <<< "$targets"
+             for target in "${targets[@]}"; do
+               echo "Processing resource: $target"                
+             done
+        
+        #cd ${{ github.event.inputs.environment }}/azure-infra
+        #terraform plan -target=$mapped_value -var-file=terraform.tfvars
+           
           
          
