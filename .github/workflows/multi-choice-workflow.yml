@@ -72,14 +72,14 @@ jobs:
                    echo "Input value '$input_value' not recognized"
                    exit 1
                    ;;                   
-               esac
+               esac               
              done
              # Remove the comma at the beginning of the string
              if [[ "$mapped_value" == ,* ]]; then
                   mapped_value="${mapped_value#,}"
              fi
-             echo "MAPPED_VALUE: $mapped_value"
-          echo "::set-output name=mapped-output::$mapped_value"
+             echo "MAPPED_VALUE: $mapped_value"  
+             echo "::set-output name=mapped-output::$mapped_value"             
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
              
