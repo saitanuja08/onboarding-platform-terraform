@@ -75,6 +75,11 @@ jobs:
                esac
              done
              echo "MAPPED_VALUE: $mapped_value"
+             # Remove the comma at the beginning of the string
+             if [[ "$mapped_value" == ,* ]]; then
+                  mapped_value="${mapped_value#,}"
+             fi
+             echo "MAPPED_VALUE: $mapped_value"
           echo ${{ github.event.inputs.resources}}
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
