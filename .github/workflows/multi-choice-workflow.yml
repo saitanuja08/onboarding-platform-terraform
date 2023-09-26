@@ -85,12 +85,58 @@ jobs:
         env:
              TF_RESOURCES: ${{ github.event.inputs.resources }}
              
+      # Map the Input Value
+      - name: Set Map Value
+        id: set-map-value
+        run: |
+          input_value="${{ github.event.inputs.resource }}"
+          mapped_value=""
+          
+          case "$input_value" in
+            "vnet")
+              map_value="module.azure-infra.azurerm_virtual_network.$input_value"
+              ;;
+            "key_vault")
+               map_value="module.azure-infra.azurerm_key_vault.$input_value"
+              ;;
+            "route_table")
+              map_value="module.azure-infra.azurerm_route_table.$input_value"
+              ;;
+            "resource_group")
+              map_value="module.azure-infra.azurerm_resource_group.$input_value"
+              ;;
+            "storage_account")
+              map_value="module.azure-infra.azurerm_storage_account.$input_value"
+              ;;
+            "storage_container")
+              map_value="module.azure-infra.azurerm_storage_container.$input_value"
+              ;;
+            "log_analytics_workspace")
+              map_value="module.azure-infra.azurerm_log_analytics_workspace.$input_value"
+              ;;
+            "key_vault_access_policy")
+              map_value="module.azure-infra.azurerm_key_vault_access_policy.$input_value"
+              ;;
+            "key_vault_service_principal_access_policy")
+              map_value="module.azure-infra.azurerm_key_vault_access_policy.$input_value"
+              ;;
+            *)
+              echo "Input value '$input_value' not recognized"
+              exit 1
+              ;;
+          esac
+          
+          echo "::set-output name=map-output::$map_value"
+        env:
+          my-input: ${{ github.event.inputs.resources }}
+
+             
       # Generates an execution plan for Terraform
       - name: Terraform Plan - Azure Infra
         run: |
-          mapped_value="${{ steps.set-mapped-value.outputs.mapped-output }}"
-          echo "mapped_value: $mapped_value"
-          IFS=',' read -ra targets <<< "$mapped_value"
+          map_value="${{ steps.set-map-value.outputs.map-output }}"
+          echo "map_value: $map_value"
+          IFS=',' read -ra targets <<< "$map_value"
           for target in "${targets[@]}"; do
             echo "Processing target: $target"                
           done
