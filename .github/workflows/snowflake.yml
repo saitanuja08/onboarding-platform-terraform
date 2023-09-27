@@ -35,6 +35,9 @@ jobs:
         run: |
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
+          pip --version
+          pip install --upgrade pip
+          pip --version
           echo "Step 1: Installing schemachange"
           pip install schemachange
           
