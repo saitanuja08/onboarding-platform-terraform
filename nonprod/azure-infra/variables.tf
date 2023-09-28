@@ -151,3 +151,15 @@ variable "sp_display_name" {
   description = "The Display Name of the Service Principal."
   default     = ""
 }
+
+variable "databricks_workspace_name" {
+  description = "Name of the Databricks Workspace"
+}
+
+variable "sku" {
+ type = string
+}
+
+variable "tags" {
+ type = string
+}

@@ -4,10 +4,17 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.0.0"
     }
+    databricks = {
+      source  = "databricks/databricks"
+      version = ">=1.5.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">=2.13.0"
+    }
   }
 }
 
-# Configure the Microsoft Azure Provider
 provider "azurerm" {
-    features {}
+  features {}
 }

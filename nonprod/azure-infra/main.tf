@@ -29,4 +29,7 @@ module azure-infra {
   key_ops = var.key_ops
   key_size = var.key_size
   azuread_users = var.azuread_users
+  sku                       = var.sku
+  databricks_workspace_name = var.databricks_workspace_name
+  tags = var.tags
 }
