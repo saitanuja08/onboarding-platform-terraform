@@ -98,6 +98,9 @@ jobs:
                  "key_vault_service_principal_access_policy")
                    mapped_value="$mapped_value,module.azure-infra.azurerm_key_vault_access_policy.$resource"
                    ;;
+                 "databricks_workspace")
+                   mapped_value="$mapped_value,module.azure-infra.azurerm_databricks_workspace.$resource"
+                   ;;
                  *)
                    echo "Input value '$input_value' not recognized"
                    exit 1

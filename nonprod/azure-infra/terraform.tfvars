@@ -26,3 +26,7 @@ key_type="RSA"
 key_ops=["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
 key_size="2048"
 sp_display_name="GitHub Actions"
+sku="premium"
+tags="env=development"
+databricks_workspace_name="Databricks-workspace"
+

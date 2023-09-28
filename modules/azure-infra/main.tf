@@ -159,3 +159,15 @@ resource "azurerm_key_vault_access_policy" "key_vault_service_principal_access_p
   secret_permissions = var.secret_permissions
   certificate_permissions = var.certificate_permissions
 }
+
+resource "azurerm_databricks_workspace" "databricks_workspace" {
+  name                        = var.databricks_workspace_name
+  resource_group_name         = var.resource_group_name
+  location                    = var.location
+  sku                         = var.sku
+  tags = {
+    Environment = var.tags
+  }
+
+  depends_on = [azurerm_storage_account.storage_account]
+}
