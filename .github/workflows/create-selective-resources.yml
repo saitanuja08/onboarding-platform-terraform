@@ -25,6 +25,7 @@ on:
            - resource_group
            - storage_account
            - storage_container
+           - databricks_workspace
            - log_analytics_workspace
            - key_vault_access_policy
            - key_vault_service_principal_access_policy
