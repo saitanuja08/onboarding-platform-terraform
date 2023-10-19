@@ -4,6 +4,6 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Triggering Wokflow 2"
+      - run: echo "Triggering the Downstream Workflow"
       - name: Checkout
         uses: actions/checkout@v2
