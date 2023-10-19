@@ -1,0 +1,15 @@
+name: Upstream Workflow
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow in Downstream Repository
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.DOWNSTREAM_WORKFLOW_PAT }}
+          repository: saitanuja08/testpoc
+          event-type: trigger-workflow
